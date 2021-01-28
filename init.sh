@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ~/EZTS
+cd ~/EZ-TS
 cp EZTS-setup.sh ~/bin/EZTS-setup
 chmod 777 ~/bin/EZTS-setup
 cp re-configure.sh ~/bin/re-configure
