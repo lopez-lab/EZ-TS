@@ -1,7 +1,7 @@
 # EZ-TS
 Automatic Azoarene Transition State Screening
 
-![autots-workflow](autots-workflow.png)
+![autots-workflow](EZTS-workflow.png)
 
 INTALLATION
 
