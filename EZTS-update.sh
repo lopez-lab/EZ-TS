@@ -1,6 +1,6 @@
 #!/bin/bash
-cd ~/EZTS
+cd ~/EZ-TS
 git reset --hard
 git pull origin
 bash init.sh
-echo "EZTS up to date"
+echo "EZ-TS up to date"
