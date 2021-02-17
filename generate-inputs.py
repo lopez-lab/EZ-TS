@@ -1303,7 +1303,7 @@ def main():
     header="""
 -------------------------------------------------------
 
-    EZTS:  Automatic Transition State Workflow
+    EZ-TS:  Automatic Transition State Workflow
                          
                          Patrick Neal and Dan Adrion
                          feat. MoRot - Jingbai Li
@@ -1313,9 +1313,9 @@ def main():
     print(header)
     with open('rotation.out','w') as log:
         log.write(header)
-    usage=''
-    description=''
-    parser = OptionParser(usage=usage, description=description)
+        
+    #Read options from setup
+    parser = OptionParser()
     parser.add_option('-c', dest='input',    type=str,   nargs=1, help='Input coordinates file, xyz or log.')
     parser.add_option('-l', dest='list',     type=str,   nargs=1, help='List of input coordinates file, will override -c option')
     parser.add_option('-a', dest='axis',     type=str,   nargs=1, help='List of axis atoms, should be quoted. Default is search two closest N atoms',default='A1 N')
@@ -1332,6 +1332,7 @@ def main():
     angles=options.angles
     benchmark=options.benchmark
 
+    #Check for list of torions to move
     if list == None and input == None:
         print('\n!!! Unkown coordinate file !!!\n')
         print(usage)
@@ -1351,8 +1352,11 @@ def main():
     for n,i in enumerate(jobs):
         frag1=[]
         file,ax,ang,index=i
+        
+        #Main function to do rotations and get TS structures
         charge,multiplicity,c1,a1,a2,c2,title,xyz,new_mol,natom=MoRot(file,ax,ang,index,optcores,optmemory,optmethod,optbasis,optroute,ts_guess,specialopts)
         
+        #for the first TS guess structure of each input molecule, setup all the scripts to handle them
         if b == 1:
             CRESTdir,ORCAdir=Conf_setup(conf_search,title)
             with open('{0}/{1}/CREST/{1}-CREST.sbatch'.format(conf_search,title),'w') as batch:
@@ -1369,6 +1373,7 @@ def main():
                 failed.write(Failed_tsguess(title,user,ts_guess,conf_search,optroute,charge,multiplicity,short_partition))
             with open('{0}/{1}-failed.sbatch'.format(conf_opt,title),'w') as failed:
                 failed.write(Failed_confopt(title,user,conf_opt,lowest_ts,optroute,charge,multiplicity,errorlog,short_partition))
+        #If not the first in the batch, just add the name to the list of TS guesses
         else:
             with open('{0}/{1}-coms.txt'.format(ts_guess,title),'a') as coms:
                 coms.write("{0}-rot-{1}.com\n".format(title,index))
