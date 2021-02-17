@@ -53,10 +53,8 @@ Progress:         24/24
 >ts_guess/
 >utilities/
 ```
-This will create the workflow architecture (placing the input structures in input/ ) and set up all calculations with the default parameters set in /home/USER/EZ-TS/config.py*
-
+This will create the workflow architecture (placing the input structures in input/ ) and set up all calculations with the default parameters set in /home/USER/EZ-TS/config.py
   * You can edit the default config, or change the settings of a particular workflow by editing the config file in the /someworkflow/utilities/config.py
-
   * To update input files in a workflow directory based on the local /someworkflow/utilities/config.py file, run ```re-configure```  in that workflow directory
             
 
