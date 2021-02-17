@@ -26,4 +26,4 @@ for b,c in enumerate(smiles):
     min=np.argmin(confs)
     AllChem.MolToPDBFile(mol,'{0}.pdb'.format(names[b]),confId=int(min))
     with open('{0}.charge'.format(names[b]),'w') as chargefile:
-        chargefile.write(Chem.GetFormalCharge(mol))
+        chargefile.write(str(Chem.GetFormalCharge(mol)))
