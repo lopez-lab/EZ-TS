@@ -12,5 +12,5 @@ else
     cp EZTS-update.sh $bindir/EZTS-update
     cp EZTS-clean.sh $bindir/EZTS-clean
     chmod 777 $bindir/EZTS-clean
-    sed -i "/#local workflow variables/i user='$USER'" config.py
+    sed -i "/#email for job status information/i user='$USER'" config.py
 fi
