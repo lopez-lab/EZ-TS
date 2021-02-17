@@ -33,6 +33,17 @@ To set up a workflow, in a directory of Gaussian log files or XYZ coordinate fil
 >azofuran.xyz
 
 [Azoarenes]$ EZTS-setup
+>-------------------------------------------------------
+
+    EZ-TS:  Automatic Transition State Workflow
+
+                         Patrick Neal and Dan Adrion
+                         feat. MoRot - Jingbai Li
+
+-------------------------------------------------------
+
+Progress:         24/24
+
 [Azoarenes]$ ls
 >conf_opt/
 >conf_search/
