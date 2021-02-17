@@ -42,7 +42,7 @@ To set up a workflow, in a directory of Gaussian log files or XYZ coordinate fil
 >ts_guess/
 >utilities/
 ```
-This will create the workflow architecture (placing the input structures in the input/ directory) and set up all calculations with the default parameters set in /home/USER/EZ-TS/config.py*
+This will create the workflow architecture (placing the input structures in input/ ) and set up all calculations with the default parameters set in /home/USER/EZ-TS/config.py*
 
   * *You can edit the default config, or change the settings of a particular workflow by editing the config file in the /someworkflow/utilities/config.py
 
