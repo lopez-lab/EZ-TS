@@ -62,7 +62,7 @@ To submit the workflow use the start.sh script in the base workflow directory:
 ```
 bash start.sh
 ```
-   This will submit three jobs: an optimization array and two dependent jobs to handle failures
+   This will submit three jobs: an optimization array and two dependent jobs to handle failures and subsequent calculations
         
 ## UPDATING CODE
 
