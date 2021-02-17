@@ -5,7 +5,7 @@ Automatic Azoarene Transition State Screening
 
 ## CODE SETUP
 
-Clone the code to your home directory:
+Clone the repository to your home directory:
 ```
 $ git clone https://github.com/lopez-lab/EZ-TS.git
 ```
@@ -51,17 +51,21 @@ This will create the workflow architecture (placing the input structures in the 
 
 To set up a workflow directly from a file SMILES file, use the ```-s``` flag and provide the file name: ```EZTS-setup -s SMILES.smi```
 The SMILES.smi should have the SMILES string in column1 and the molecule name in column2:
+
     line1> C1(/N=N/C2=CC=CC=C2)=CC=CC=C1 Mol1
     line2> C1(/N=N/C2=CC=CO2)=CC=CO1 Mol2       
     line3> C1(/N=N/C2=CC=CS2)=CC=CS1 Mol3       
               
 
    ### RUN
-To submit the workflow simply execute the start.sh script in the base workflow directory: 
-       This will submit three jobs: an optimization array and two dependent jobs to handle failures
+To submit the workflow use the start.sh script in the base workflow directory: 
+```
+bash start.sh
+```
+   This will submit three jobs: an optimization array and two dependent jobs to handle failures
         
 ## UPDATING CODE
 
-   To update the autots code in your home directory to the most recent version on this page, execute 'EZTS-update'.
+   To update the EZ-TS code in your home directory to the most recent version on this page, execute ```EZTS-update```
 
 
