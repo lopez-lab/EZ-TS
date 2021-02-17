@@ -15,7 +15,7 @@ else
     sed -i "/#email for job status information/i sys_user='$USER'" config.py
 fi
 
-#Make default directories to store runlog and errors, but don't overwrite if already present
+#Make default directories to store archived config.py files, runlog and errors, but don't overwrite if already present
 if ! [ -d runlog ]
     then
     mkdir runlong
@@ -23,4 +23,8 @@ fi
 if ! [ -d errors ]
     then
     mkdir errors
+fi
+if ! [ -d archive ]
+    then
+    mkdir archive
 fi
