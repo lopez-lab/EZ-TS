@@ -18,7 +18,7 @@ fi
 #Make default directories to store archived config.py files, runlog and errors, but don't overwrite if already present
 if ! [ -d runlog ]
     then
-    mkdir runlong
+    mkdir runlog
 fi
 if ! [ -d errors ]
     then
