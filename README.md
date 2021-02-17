@@ -19,7 +19,7 @@ $ bash init.sh
     * Paths to all QM package executables should be set in the master /home/$USER/EZ-TS/config.py file
 
 ## USAGE
-EZ-TS is handles the setup and management of calculations by generating a batch of transition state guess structures for each molecule and writing a chain of calculation input/sbatch files to carry out the numerous pre-optimizations, conformational searches, conformer energy evaluations, and final optimizations. 
+EZ-TS handles the setup and management of calculations by generating a batch of transition state guess structures for each molecule and writing a chain of calculation input/sbatch files to carry out the numerous pre-optimizations, conformational searches, conformer energy evaluations, and final optimizations. 
 
 After completion, the lowest energy transition state found by EZ-TS for each molecule is copied to the base directory. 
 
