@@ -44,9 +44,9 @@ To set up a workflow, in a directory of Gaussian log files or XYZ coordinate fil
 ```
 This will create the workflow architecture (placing the input structures in input/ ) and set up all calculations with the default parameters set in /home/USER/EZ-TS/config.py*
 
-  * *You can edit the default config, or change the settings of a particular workflow by editing the config file in the /someworkflow/utilities/config.py
+  * You can edit the default config, or change the settings of a particular workflow by editing the config file in the /someworkflow/utilities/config.py
 
-  * *To update input files in a workflow directory based on the local /someworkflow/utilities/config.py file, run ```re-configure```  in that workflow directory
+  * To update input files in a workflow directory based on the local /someworkflow/utilities/config.py file, run ```re-configure```  in that workflow directory
             
 
 To set up a workflow directly from a file SMILES file, use the ```-s``` flag and provide the file name: ```EZTS-setup -s SMILES.smi```
