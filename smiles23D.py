@@ -1,3 +1,4 @@
+from rdkit import Chem
 from rdkit.Chem import AllChem
 import numpy as np
 import sys
