@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#This is a helper script for the main heavy lifter setup.py. It gathers the input files and provides the necessary flags for setup.py
+#This is a helper script for the main heavy lifter generate_input.py. It gathers the input files and provides the necessary flags for generate_input.py
 
 #Parse some options for reading SMILES file or doing benchmarking
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
