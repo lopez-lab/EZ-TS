@@ -13,7 +13,6 @@ allinputs=np.genfromtxt(input,dtype='str')
 #NAME    SMILES
 #...     ...
 
-charges=[]
 smiles=allinputs[:,0]
 names=allinputs[:,1]
 for b,c in enumerate(smiles):
@@ -26,4 +25,5 @@ for b,c in enumerate(smiles):
         confs[x]=i[1]
     min=np.argmin(confs)
     AllChem.MolToPDBFile(mol,'{0}.pdb'.format(names[b]),confId=int(min))
-    charges.append(Chem.GetFormalCharge(mol))
+    with open('{0}.charge'.format(names[b]),'w') as chargefile:
+        chargefile.write(Chem.GetFormalCharge(mol))
