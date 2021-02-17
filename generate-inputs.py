@@ -219,6 +219,17 @@ def ReadXYZ(title):
     with open('%s.xyz' % (title),'r') as xyzfile:
         coord=xyzfile.read().splitlines()
         natom=int(coord[0])
+        #Try to get charge information from title line
+        if 'charge=' in coord[1].lower():
+            try:
+                charge = int(coord[1].split('=')[1])
+            except:
+                print('Could not read charge for {0}, be sure charge=interger'.format(title))
+                exit()
+        else:
+            charge=0
+        multiplicity=1
+
         coord=coord[2:2+natom]
 
     xyz=[]
