@@ -5,7 +5,7 @@ Automatic Azoarene Transition State Screening
 
 ## CODE SETUP
 
-Clone the repository to your home directory:
+1. Clone the repository to your home directory:
 ```
 $ git clone https://github.com/lopez-lab/EZ-TS.git
 ```
@@ -13,7 +13,7 @@ $ git clone https://github.com/lopez-lab/EZ-TS.git
 ```
 $ bash init.sh
 ```
-4. Dependent Package installations and interfacing:
+3. Dependent Package installations and interfacing:
     * OpenBabel must be installed prior to use
     * If starting calculations from SMILES, RDKIT environment must be active
     * Paths to all QM package executables should be set in the master /home/$USER/EZ-TS/config.py file
