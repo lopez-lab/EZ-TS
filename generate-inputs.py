@@ -232,7 +232,17 @@ def ReadXYZ(title):
         xyz.append([x,y,z])
 
     xyz=np.array(xyz)
-    charge=0
+    
+    #Try to get charge information from title line
+    if 'charge=' in coord[1].lower():
+        try:
+            charge = int(coord[1].split('=')[1])
+        except:
+            print('Could not read charge for {0}, be sure Charge=interger'.format(title))
+            exit()
+    else:
+        charge=0
+    
     multiplicity=1
   
     return charge,multiplicity,atoms,xyz
