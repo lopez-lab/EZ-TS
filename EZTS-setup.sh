@@ -1,44 +1,44 @@
 #!/bin/bash
 
+#This is a helper script for the main heavy lifter setup.py. It gathers the input files and provides the necessary flags for setup.py
+
+#Parse some options for reading SMILES file or doing benchmarking
+OPTIND=1         # Reset in case getopts has been used previously in the shell.
+
 benchmarking_flag=''
 smiles=''
 optstring=":s:b"
 
-while getopts ${optstring} arg; do
+while getopts $optstring arg; do
   case "${arg}" in
 
     b) benchmarking_flag='--benchmark' ;;
     s) smiles="${OPTARG}" ;;
-    ?)
-      echo "Invalid option: -${OPTARG}." ;;
+    ?) echo "Invalid option: -${OPTARG}." ;;
   esac
 done
 
-#Set up directories: conf_opt  conf_search  input  lowest_ts  ts_guess  utilities
-workdir=`pwd`
-
-if ! [ -z ${smiles+x} ]
+#If reading from smiles file, generate xyz coordinates
+if [ -n "$smiles" ]
     then
     echo "Reading smiles from $smiles"
     echo ""
     python3 ~/EZTS/smiles23D.py $smiles
-
-#unfortunately a bit messy to convert to pdb then xyz, but rdkit is struggling to directly to xyz
-    for i in *.pdb; do obabel $i -o xyz -O ${i%.*}.xyz; done
+    
+#unfortunately a bit messy to convert to pdb then xyz, but rdkit is struggling to go directly to xyz
+    for i in *.pdb; do obabel $i -o xyz -O ${i%.*}.xyz; rm $i; done
+    mv $smiles input/
 fi
 
+#Set up directories: conf_opt  conf_search  input  lowest_ts  ts_guess  utilities
+workdir=`pwd`
 
+#If there is a previous workflow here, reset the local workflow variables, but don't overwrite everything
 if test -f input/ts_guess-list.txt
     then
-   # rm input/ts_guess-list.txt
     sed -i '1,/#local workflow variables/!d' utilities/config.py
-   # find ./ -name "*energies.txt" -delete
-   # find ./ -name "*-resubmit.txt" -delete
-   # find ./ -name "*-tier*txt" -delete
-  #  find ./ -name "LOWEST_TS_NOTFOUNDBYCREST" -delete
-  #  find ./ -name "*complete" -delete
-  #  find ./ -name "freqonly" -delete
-  #  find ./ -name "*output.txt" -delete
+
+#Check for log files in the directory and build setup.py input list
 elif compgen -G "*log" > /dev/null
     then
     mkdir utilities
@@ -48,6 +48,7 @@ elif compgen -G "*log" > /dev/null
     mkdir conf_opt
     mkdir lowest_ts
     mv *log input/
+    #change names of input files that match keywords used by EZ-TS
     rename "tier" "TIER" input/*log
     rename "tier" "TIER" input/*xyz
     rename "conf" "CONF" input/*log
@@ -56,9 +57,9 @@ elif compgen -G "*log" > /dev/null
         do
         echo -e "$workdir/$i V1 175 R1   90 R2   0\n$workdir/$i V1 175 R1   90 R2 180\n$workdir/$i V1 175 R1  180 R2  90\n$workdir/$i V1 175 R1  180 R2 180\n$workdir/$i V1 175 R1  -90 R2   0\n$workdir/$i V1 175 R1  -90 R2  90" >> input/ts_guess-list.txt
         echo -e "$workdir/$i V2 175 R1   90 R2   0\n$workdir/$i V2 175 R1   90 R2 180\n$workdir/$i V2 175 R1  180 R2  90\n$workdir/$i V2 175 R1  180 R2 180\n$workdir/$i V2 175 R1  -90 R2   0\n$workdir/$i V2 175 R1  -90 R2  90" >> input/ts_guess-list.txt
+    done
 
-done
-
+#Check for xyz files in the directory and build setup.py input list
 elif compgen -G "*xyz" > /dev/null
     then
     mkdir utilities
@@ -68,6 +69,7 @@ elif compgen -G "*xyz" > /dev/null
     mkdir conf_opt
     mkdir lowest_ts
     mv *xyz input/
+    #change names of input files that match keywords used by EZ-TS
     rename "tier" "TIER" input/*log
     rename "tier" "TIER" input/*xyz
     rename "conf" "CONF" input/*log
@@ -76,33 +78,26 @@ elif compgen -G "*xyz" > /dev/null
         do
         echo -e "$workdir/$i V1 175 R1   90 R2   0\n$workdir/$i V1 175 R1   90 R2 180\n$workdir/$i V1 175 R1  180 R2  90\n$workdir/$i V1 175 R1  180 R2 180\n$workdir/$i V1 175 R1  -90 R2   0\n$workdir/$i V1 175 R1  -90 R2  90" >> input/ts_guess-list.txt
         echo -e "$workdir/$i V2 175 R1   90 R2   0\n$workdir/$i V2 175 R1   90 R2 180\n$workdir/$i V2 175 R1  180 R2  90\n$workdir/$i V2 175 R1  180 R2 180\n$workdir/$i V2 175 R1  -90 R2   0\n$workdir/$i V2 175 R1  -90 R2  90" >> input/ts_guess-list.txt
-done
+    done
 
+#If no log or xyz files can be found
 else
-    echo "EZTS"
+    echo "EZ-TS"
     echo " "
-    echo "Error while setting up EZTS"
-    echo "There is no log file, xyz, smiles file, or existing EZTS in this directory"
+    echo "Error while setting up EZ-TS"
+    echo "There is no log file, xyz, smiles file, or existing EZ-TS in this directory"
     echo " "
     exit 1
-
-fi
-
-#move the smiles file into input if needed
-if ! [ -z ${smiles+x} ]
-    then
-    mv $smiles input/
-    mv *pdb input/
 fi
 
 echo "Setup command options used for this run: $benchmarking_flag $smiles" > ./input/summary
 
-cp ~/EZTS/config.py  utilities/
-cp ~/EZTS/generate-inputs.py utilities/
-cp ~/EZTS/get-lowest.sh utilities/
-cp ~/EZTS/start.sh ./
-cp ~/EZTS/xyz2com.py utilities/
-cp ~/EZTS/orca2xyz.py utilities/
+cp ~/EZ-TS/config.py  utilities/
+cp ~/EZ-TS/generate-inputs.py utilities/
+cp ~/EZ-TS/get-lowest.sh utilities/
+cp ~/EZ-TS/start.sh ./
+cp ~/EZ-TS/xyz2com.py utilities/
+cp ~/EZ-TS/orca2xyz.py utilities/
 
 echo "maindir='$workdir'" >> utilities/config.py
 echo "utilities='$workdir/utilities'" >> utilities/config.py
