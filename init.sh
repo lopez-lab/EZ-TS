@@ -1,12 +1,16 @@
 #!/bin/bash
 cd ~/EZ-TS
-cp EZTS-setup.sh ~/bin/EZTS-setup
-chmod 777 ~/bin/EZTS-setup
-cp re-configure.sh ~/bin/re-configure
-chmod 777 ~/bin/re-configure
-cp EZTS-update.sh ~/bin/EZTS-update
-chmod 777 ~/bin/EZTS-update
-chmod 777 *sh
-cp EZTS-clean.sh ~/bin/EZTS-clean
-chmod 777 ~/bin/EZTS-clean
-sed -i "/#local workflow variables/i user='$USER@northeastern.neu.edu'" config.py
+bindir=~/bin
+if ! [ -d "$bindir" ]
+    then
+    echo "ERROR: No $bindir directory found! to make the EZ-TS command tools easy to use either make a ~/bin directory, or edit the bindir in this ~/EZ-TS/init.sh script to a directory of your choice"
+    exit 1
+else
+    chmod 777 *sh
+    cp EZTS-setup.sh $bindir/EZTS-setup
+    cp re-configure.sh $bindir/re-configure
+    cp EZTS-update.sh $bindir/EZTS-update
+    cp EZTS-clean.sh $bindir/EZTS-clean
+    chmod 777 $bindir/EZTS-clean
+    sed -i "/#local workflow variables/i user='$USER'" config.py
+fi
