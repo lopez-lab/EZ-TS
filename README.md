@@ -4,7 +4,6 @@ Automatic Azoarene Transition State Screening
 ![autots-workflow](EZTS-workflow.png)
 
 INTALLATION
-
     1. Copy the code to your home directory by executing the following in your home directory:
     'git clone https://github.com/lopez-lab/EZ-TS.git'
     2. Enter the autots directory, which should be at ~/EZ-TS and execute the initialization by running 'bash init.sh'. This will make the autots tools more accesible. 
@@ -13,7 +12,6 @@ INTALLATION
     5. Paths to QM package executables should be set in the /home/USER/EZ-TS/config.py file.
 
 USAGE
-
     SETUP
         To set up a workflow, in a directory of Gaussian log files or XYZ coordinate files simply type 'EZTS-setup' in that directory
         This will create the workflow architecture and set up all calculations with the default parameters set in /home/USER/EZ-TS/config.py*
@@ -34,7 +32,6 @@ USAGE
         This will submit three jobs: an optimization array and two dependent jobs to handle failures
         
 UPDATING CODE
-
     To update the autots code in your home directory to the most recent version on this page, execute 'EZTS-update'.
 
 
