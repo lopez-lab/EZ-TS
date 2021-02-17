@@ -26,7 +26,7 @@ if [ -n "$smiles" ]
     python3 ~/EZ-TS/smiles23D.py $smiles
     
 #unfortunately a bit messy to convert to pdb then xyz, and temporarily store the charge in a charge file... but this gets the job done with minimal bash/python clash
-    for i in *.pdb; do charge=$(cat ${i%.*}.charge); obabel $i --addtotitle " charge=$charge" -o xyz -O ${i%.*}.xyz; rm $i; rm ${i}.charge; done
+    for i in *.pdb; do charge=$(cat ${i%.*}.charge); obabel $i --addtotitle " charge=$charge" -o xyz -O ${i%.*}.xyz; rm $i; rm ${i%.*}.charge; done
 fi
 
 #Set up directories: conf_opt  conf_search  input  lowest_ts  ts_guess  utilities
