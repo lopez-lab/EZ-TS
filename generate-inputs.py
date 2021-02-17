@@ -241,7 +241,8 @@ def ReadXYZ(title):
         x,y,z=float(x),float(y),float(z)
         atoms.append(n)
         xyz.append([x,y,z])
-  
+    
+    xyz=np.array(xyz)
     return charge,multiplicity,atoms,xyz
 
 
