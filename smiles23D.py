@@ -2,6 +2,7 @@ from rdkit.Chem import AllChem
 import numpy as np
 import sys
 
+#Generate 3D coordinates from smiles file
 input=sys.argv[1]
 allinputs=np.genfromtxt(input,dtype='str')
 
@@ -15,7 +16,6 @@ allinputs=np.genfromtxt(input,dtype='str')
 smiles=allinputs[:,0]
 names=allinputs[:,1]
 for b,c in enumerate(smiles):
-
     mol = AllChem.MolFromSmiles(c)
     mol = AllChem.AddHs(mol,addCoords=True)
     AllChem.EmbedMultipleConfs(mol,numConfs=5)
