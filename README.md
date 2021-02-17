@@ -9,7 +9,7 @@ Automatic Azoarene Transition State Screening
 ```
 $ git clone https://github.com/lopez-lab/EZ-TS.git
 ```
-2. Execute ~/EZ-TS/init.sh to set up USER information and copy the EZTS tools to your ~/bin for easy access
+2. Execute ~/EZ-TS/init.sh to set up $USER information, local directories, and copy the EZTS tools to your ~/bin for easy access:
 ```
 $ bash init.sh
 ```
@@ -71,11 +71,11 @@ To submit the workflow use the start.sh script in the base workflow directory:
 ```
 bash start.sh
 ```
-   This will submit three jobs for each input structure: an optimization array and two dependent jobs to handle failures and subsequent calculations
+   This will submit three jobs for each input structure: an optimization array and two dependent jobs to handle failures and subsequent calculations.
         
 ## UPDATING CODE
 
    To update the EZ-TS code in your home directory to the most recent version on this page, execute ```EZTS-update```
-   This will pull in the standard config.py file, which might write over some user's changes. Therefore, a copy of the current config.py is copied to the ~/EZ-TS/archive directory with a time/date stamp: config-DATE-TIME.py
+   This will pull in the standard config.py file, which might write over some user's changes. Therefore, a copy of the current config.py is copied to the ~/EZ-TS/archive directory with a time/date stamp: config-DATE-TIME.py.
 
 
