@@ -57,6 +57,7 @@ This will create the workflow architecture (placing the input structures in inpu
   * You can edit the default config, or change the settings of a particular workflow by editing the config file in the /someworkflow/utilities/config.py
   * To update input files in a workflow directory based on the local /someworkflow/utilities/config.py file, run ```re-configure```  in that workflow directory
             
+If the input is a Gaussian log file, the charge will be read in. If an xyz is given, EZ-TS will parse the title line (line 2) for 'charge=INT' where INT is the charge, if absent, will default to 0.
 
 To set up a workflow directly from a file SMILES file, use the ```-s``` flag and provide the file name: ```EZTS-setup -s SMILES.smi```
 The SMILES.smi should have the SMILES string in column1 and the molecule name in column2:
@@ -65,7 +66,6 @@ The SMILES.smi should have the SMILES string in column1 and the molecule name in
     line2> C1(/N=N/C2=CC=CO2)=CC=CO1 Mol2       
     line3> C1(/N=N/C2=CC=CS2)=CC=CS1 Mol3       
               
-
    ### RUN
 To submit the workflow use the start.sh script in the base workflow directory: 
 ```
