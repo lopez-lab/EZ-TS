@@ -2,7 +2,7 @@
 ###  System Information ###
 ###########################
 #email for job status information
-user=sysuser+'@northeastern.edu'
+user=sys_user+'@northeastern.edu'
 
 #G16
 g16root='/work/lopez/'
