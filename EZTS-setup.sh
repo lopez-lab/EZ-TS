@@ -27,7 +27,6 @@ if [ -n "$smiles" ]
     
 #unfortunately a bit messy to convert to pdb then xyz, but rdkit is struggling to go directly to xyz
     for i in *.pdb; do obabel $i -o xyz -O ${i%.*}.xyz; rm $i; done
-    mv $smiles input/
 fi
 
 #Set up directories: conf_opt  conf_search  input  lowest_ts  ts_guess  utilities
@@ -88,6 +87,12 @@ else
     echo "There is no log file, xyz, smiles file, or existing EZ-TS in this directory"
     echo " "
     exit 1
+fi
+
+#Now that input dir is created, move smiles file inside if needed
+if [ -n "$smiles" ]
+    then
+    mv $smiles input/
 fi
 
 echo "Setup command options used for this run: $benchmarking_flag $smiles" > ./input/summary
