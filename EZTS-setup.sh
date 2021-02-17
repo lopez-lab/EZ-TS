@@ -23,7 +23,7 @@ if [ -n "$smiles" ]
     then
     echo "Reading smiles from $smiles"
     echo ""
-    python3 ~/EZTS/smiles23D.py $smiles
+    python3 ~/EZ-TS/smiles23D.py $smiles
     
 #unfortunately a bit messy to convert to pdb then xyz, but rdkit is struggling to go directly to xyz
     for i in *.pdb; do obabel $i -o xyz -O ${i%.*}.xyz; rm $i; done
