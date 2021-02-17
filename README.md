@@ -78,5 +78,6 @@ bash start.sh
 ## UPDATING CODE
 
    To update the EZ-TS code in your home directory to the most recent version on this page, execute ```EZTS-update```
+   This will pull in the standard config.py file, which might write over some user's changes. Therefore, a copy of the current config.py is copied to the ~/EZ-TS/archive directory with a time/date stamp: config-DATE-TIME.py
 
 
