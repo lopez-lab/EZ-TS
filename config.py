@@ -20,9 +20,9 @@ default_partition='short'
 short_partition='debug'
 
 #EZTS error log directory - directory where you want to store information about calculation errors
-errorlog='/scratch/neal.pa/autots-errors/'
-#EZTS run log - directory where you want to store information about instances of EZTS
-runlog='/scratch/neal.pa/autots-runlog/'
+errorlog='~/EZ-TS/errors/'
+#EZTS run log - directory where you want to store information about instances of EZ-TS
+runlog='~/EZ-TS/runlog/'
 
 
 ########################
