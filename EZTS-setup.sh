@@ -26,7 +26,7 @@ if [ -n "$smiles" ]
     python3 ~/EZ-TS/smiles23D.py $smiles
     
 #unfortunately a bit messy to convert to pdb then xyz, but rdkit is struggling to go directly to xyz
-    for i in *.pdb; do obabel $i -o xyz -O ${i%.*}.xyz; rm $i; done
+    for i in *.pdb; do obabel $i -o xyz -O ${i%.*}.xyz; done #rm $i; done
 fi
 
 #Set up directories: conf_opt  conf_search  input  lowest_ts  ts_guess  utilities
