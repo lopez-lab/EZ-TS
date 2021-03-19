@@ -9,8 +9,8 @@ allinputs=np.genfromtxt(input,dtype='str')
 
 # input should be of the format:
 
-#NAME    SMILES
-#NAME    SMILES
+#SMILES    NAME
+#SMILES    NAME
 #...     ...
 
 smiles=allinputs[:,0]
