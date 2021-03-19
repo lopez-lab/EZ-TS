@@ -61,7 +61,7 @@ CRESTcores=16
 CRESTmem=120
 CRESTtime='1-00:00:00'
 CRESTpartition='short,lopez'
-CRESTmethod=CRESTmethod='-xnam /work/lopez/xtb/xtb_6.2.3/bin/xtb -g H2O -ewin 500 -T 14 -opt crude -subrmsd --verbose'
+CRESTmethod='-xnam /work/lopez/xtb/xtb_6.2.3/bin/xtb -g H2O -ewin 500 -T 14 -opt crude -subrmsd --verbose'
 
 ORCAmethod='B3LYP/G D3BJ 6-31G(d) def2/J NOAUTOSTART Opt cpcm(water)'
 ORCAcores=8
