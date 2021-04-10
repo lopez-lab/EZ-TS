@@ -36,8 +36,9 @@ There are three options to EZTS-setup:
 [Azoarenes]$ ls
 >azothiophene.xyz
 >azofuran.xyz
+>azothiophene.xyz
 
-[Azoarenes]$ EZTS-setup
+[Azoarenes]$ EZTS-setup --irc
 >-------------------------------------------------------
 
     EZ-TS:  Automatic Transition State Workflow
@@ -47,13 +48,15 @@ There are three options to EZTS-setup:
 
 -------------------------------------------------------
 
-Progress:         24/24
+Progress:         36/36
 
 [Azoarenes]$ ls
 >conf_opt/
 >conf_search/
 >input/
+>irc/
 >lowerst_ts/
+>reactants/
 >start.sh
 >ts_guess/
 >utilities/
@@ -87,6 +90,24 @@ Both of the compile_results scripts have the availible agrugments:
  * ```-d``` or ```--directories``` - parent EZ-TS directories to compile results from. This allows for multiple directories to be compiled at once, but if the script is run in a workflow/utilities directory without the ```-d``` argument, it will just extract that workflow.
  * ```-o``` or ```--output``` - output file. Will default to ```compiled_data-(day)-(month)-(hour)-(minute).xlsx``` if none provided. 
  * ```-e``` or ```--experimental``` - an escaped json string of molecule:barrier key:value pairs like ```"{\"mol1\":15,\"mol1\":22}"```. 
+
+After workflow is complete - 
+```[Azoarenes]$ cd utilities
+[Azoarenes]$ python3 compile_results.py
+>
+>
+>[Azoarenes]$ls ../
+>conf_opt/
+>conf_search/
+>input/
+>irc/
+>lowerst_ts/
+>reactants/
+>start.sh
+>status.txt
+>ts_guess/
+>utilities/
+```
 
 ## UPDATING CODE
 
