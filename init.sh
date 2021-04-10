@@ -7,10 +7,9 @@ if ! [ -d "$bindir" ]
     exit 1
 else
     chmod 777 *sh
-    cp EZTS-setup.sh $bindir/EZTS-setup
+    cp EZTS-setup.py $bindir/EZTS-setup
     cp re-configure.sh $bindir/re-configure
     cp EZTS-update.sh $bindir/EZTS-update
-    cp EZTS-clean.sh $bindir/EZTS-clean
 
     sed -i '/sys_user=/d' config.py
     sed -i "/#email for job status information/i sys_user='$USER'" config.py
