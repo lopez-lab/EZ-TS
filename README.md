@@ -16,7 +16,7 @@ $ bash init.sh
 3. Dependent Packages:
     * OpenBabel must be installed prior to use
     * If starting calculations from SMILES, RDKIT environment must be active
-    * Paths to all QM package executables should be set in the master ~/EZ-TS/config.py file
+    * Paths to all QM package executables should be set in the master ~/EZ-TS/config.py file (Gaussian16, CREST, ORCA)
 
 ## USAGE
 EZ-TS handles the setup and management of calculations by generating a batch of transition state guess structures for each molecule and writing a chain of calculation input/sbatch files to carry out the numerous pre-optimizations, conformational searches, conformer energy evaluations, and final optimizations. 
