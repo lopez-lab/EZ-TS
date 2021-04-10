@@ -1522,7 +1522,7 @@ fi
 #bash {2}/get-lowest.sh {3} conf_opt
 
 #new python get_lowest script (also calculates dihedrals to filter more bad TS structures)
-python3 ../utilities/get-lowest.py {3} {7} {8} {9} {10} conf_opt
+python3 ../utilities/get_lowest.py {3} {7} {8} {9} {10} conf_opt
 
 
 cd ../lowest_ts
