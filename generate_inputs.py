@@ -966,7 +966,7 @@ fi
 #bash {7}/get-lowest.sh {6} ts_guess
 
 #new python get_lowest script (also calculates dihedrals to filter more bad TS structures)
-python3 ../utilities/get-lowest.py {6} {12} {13} {14} {15} ts_guess
+python3 ../utilities/get_lowest.py {6} {12} {13} {14} {15} ts_guess
 
 ulimit -s unlimited
 export OMP_STACKSIZE={3}G
