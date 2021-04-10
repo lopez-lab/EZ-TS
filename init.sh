@@ -3,7 +3,7 @@ cd ~/EZ-TS
 bindir=~/bin
 if ! [ -d "$bindir" ]
     then
-    echo "ERROR: No $bindir directory found! to make the EZ-TS command tools easy to use either make a ~/bin directory, or edit the bindir in this ~/EZ-TS/init.sh script to a directory of your choice"
+    echo "ERROR: No $bindir directory found! to make the EZ-TS command tools easy to use either make a ~/bin directory, or edit the bindir in this ~/EZ-TS/init.sh script to a directory of your choice that is in your path"
     exit 1
 else
     chmod 777 *sh
