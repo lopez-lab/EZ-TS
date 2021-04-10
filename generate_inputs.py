@@ -1,9 +1,5 @@
 #new version
 import sys
-try:
-    sys.path.remove('/home/neal.pa/EZ-TS')
-except:
-    pass
 from config import *
 import os
 import numpy as np
