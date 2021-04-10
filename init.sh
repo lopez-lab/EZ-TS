@@ -6,7 +6,7 @@ if ! [ -d "$bindir" ]
     echo "ERROR: No $bindir directory found! to make the EZ-TS command tools easy to use either make a ~/bin directory, or edit the bindir in this ~/EZ-TS/init.sh script to a directory of your choice that is in your path"
     exit 1
 else
-    chmod 777 *sh
+    chmod 777 *sh EZTS-setup.py
     cp EZTS-setup.py $bindir/EZTS-setup
     cp re-configure.sh $bindir/re-configure
     cp EZTS-update.sh $bindir/EZTS-update
