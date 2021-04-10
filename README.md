@@ -93,10 +93,14 @@ Both of the compile_results scripts have the availible agrugments:
 
 After workflow is complete - 
 ```[Azoarenes]$ cd utilities
-[Azoarenes]$ python3 compile_results.py
->
->
+[Azoarenes]$ python compile_results.py
+>Writing output to /scratch/USER/workflow/compiled_results_10-4-16-13.xlsx
+Reading ['azobenzene', 'azothiophene', 'azofuran'] from /scratch/USER/workflow
+3 barriers processed, 3 barriers complete (100.0%)
+
 >[Azoarenes]$ls ../
+>cis/                             -- cis reactants copied here by compile_results
+>compiled_results_10-4-16.xlsx    -- compiled barrier spreadsheet
 >conf_opt/
 >conf_search/
 >input/
@@ -105,6 +109,7 @@ After workflow is complete -
 >reactants/
 >start.sh
 >status.txt
+>trans/                            -- trans reactants copied here by
 >ts_guess/
 >utilities/
 ```
