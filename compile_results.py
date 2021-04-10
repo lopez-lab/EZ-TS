@@ -480,7 +480,9 @@ def main():
         date = '{0}-{1}-{2}-{3}'.format(date.day,date.month,date.hour,date.minute)
         if os.getcwd().split('/')[-1] == 'utilities' and len(inputs) == 1:
             output = '{1}/compiled_results_{0}.xlsx'.format(date,inputs[0])
-        
+        else:
+            output='compiled_results_{0}.xlsx'.format(date)
+            
     print('Writing output to {0}'.format(output))
     writer = pd.ExcelWriter(output,engine='xlsxwriter')
 
