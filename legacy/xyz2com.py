@@ -1,49 +1,16 @@
 from config import *
+from optparse import OptionParser
 import os
 import sys
 import numpy as np
 
+#This script takes in a xyz coordinate file and generates a Gaussian input file
+
+#It is used to create the initial conformer optimization inputs, the benchmarking inputs, and the final IRC inputs
+#Each of these uses has a specific flag to write the correct input type
+
 # Input Parameters
 
-name=sys.argv[1].split('.')[0]
-workdir=os.getcwd()
-ext='com'
-os.chdir(workdir)
-confstring=name.find('-conf')
-rotstring=name.find('-rot')
-if confstring > -1:
-    basename=name.split('-conf')[0]
-elif rotstring > -1:
-    basename=name.split('-rot')[0]
-else:
-    basename=name
-charge='unknown'
-multiplicity='unknown'
-
-Dict={
-    "6-31G(d)":"pople",
-    "6-31+G(d,p)":"pople-plusdp",
-    "6-311+G(d,p)":"pople-tz",
-    "cc-pvdz":"cc-pvdz",
-    "cc-pvtz":"cc-pvtz",
-    "aug-cc-pvdz":"aug-cc-pvdz",
-    "aug-cc-pvtz":"aug-cc-pvtz"
-}
-
-if len(sys.argv) > 2:
-    benchmark=sys.argv[2]
-    benchmarkflag=benchmark.find('benchmark')
-else:
-    benchmarkflag= -1
-
-# Error exit if no input is given
-if len(sys.argv) <2:
-    info="""
-    no xyz input file was found
-    """
-
-    print(info)
-    exit()
 
 #template definitions
 
@@ -367,12 +334,14 @@ def writeinput(basislist,tier,inputdir,basename,name,workdir,optcores,optmemory,
     #        if 'Multiplicity =' in line:
      #           charge=line.split()[2]
      #           multiplicity=line.split()[5]
+   
+    #need a way to get the charge and multiplicity again
     charge=0
     multiplicity=1
     coord=open('{0}.xyz'.format(name), 'r').read().splitlines()
     natom=int(coord[0])
     coord=coord[2:natom+2]
-    if  benchmarkflag == 0:
+    if  runtype == 'benchmark':
         with open('{0}/{1}-{2}-{3}-tier{4}.com'.format(workdir,name,optmethod,Dict[optbasis],tier),'w') as shll:
             shll.write(generate_com(basislist,tier,name,optcores,optmemory,optmethod,optbasis,optroute,charge,multiplicity,coord,benchmarkflag,specialopts))
         return(charge,multiplicity)
@@ -380,8 +349,10 @@ def writeinput(basislist,tier,inputdir,basename,name,workdir,optcores,optmemory,
         shll=open('{0}/{1}.com'.format(workdir,name),'w')
         shll.write(generate_com(basislist,tier,name,optcores,optmemory,optmethod,optbasis,optroute,charge,multiplicity,coord,benchmarkflag,specialopts))
         shll.close()
-#Generation Steps
-if benchmarkflag == 0:
+
+
+
+def write_benchmark():
     for x,n in enumerate(benchmarkmethods):
         for y,m in enumerate(benchmarkbasis):
             for z,o in enumerate(benchmarkbasis[y]):
@@ -390,8 +361,8 @@ if benchmarkflag == 0:
                 specialopts=benchmarkspecialopts[x]
                 charge,multiplicity=writeinput(benchmarkbasis[y],z,inputdir,basename,name,workdir,optcores,optmemory,optmethod,optbasis,optroute,specialopts,x,charge,multiplicity,benchmarkflag,user)
     tiers=np.zeros(7)
-    for n,m in enumerate(benchmarkbasis):
-        count=len(benchmarkbasis[n])
+    for n,tier in enumerate(benchmarkbasis):
+        count=len(tier)
         tiers[0]=tiers[0]+1
         if count > 1:
             tiers[1]=tiers[1]+1
@@ -415,12 +386,83 @@ if benchmarkflag == 0:
                 sbatch.write(Sbatch(total,p,optpartition,optcores[p],user,optmemory[p],opttime,workdir,name))
             with open('{0}/{1}-tier{2}-failed.sbatch'.format(workdir,name,p),'w') as failed:
                 failed.write(Fixcbenchmarkopt(p,name,user,workdir,optroute,charge,multiplicity))
-       
-else:
-    x=0
-    tier=False
-    basislist=False 
-    writeinput(basislist,tier,inputdir,basename,name,workdir,optcores[0],optmemory[0],optmethod,optbasis,optroute,specialopts,x,charge,multiplicity,benchmarkflag,user)
 
+
+
+
+################################################################################################################################################
+#Generation Steps
+
+def main():
+    parser = OptionParser()
     
+    parser.add_option('--benchmark',dest='benchmark',action="store_true", default=False)
+    parser.add_option('-q','--charge',dest='charge',default=0)
+    parser.add_option('-m','--mult',dest='mult',default=1)
+    
+    (options,args) = parser.parse_args()
+   
+    #input file is the first (only) positional argument
+    try:
+        name = args[0].split('.')[0]
+    except:
+        info="""
+    no xyz input file was found
+    """
+
+        print(info)
+        exit()
+    
+    benchmark = options.benchmark
+    charge = options.charge
+    try:
+        charge = charge[0]
+    except:
+        pass
+
+    mult = options.mult
+    try:
+        mult = mult[0]
+    except:
+        pass 
+ 
+    #setup things
+    workdir=os.getcwd()
+    ext='com'
+
+    #not sure these are necessary anymore
+    confstring=name.find('-conf')
+    rotstring=name.find('-rot')
+    if confstring > -1:
+        basename=name.split('-conf')[0]
+    elif rotstring > -1:
+        basename=name.split('-rot')[0]
+    else:
+        basename=name
+
+
+    Dict={
+    "6-31G(d)":"pople",
+    "6-31+G(d,p)":"pople-plusdp",
+    "6-311+G(d,p)":"pople-tz",
+    "cc-pvdz":"cc-pvdz",
+    "cc-pvtz":"cc-pvtz",
+    "aug-cc-pvdz":"aug-cc-pvdz",
+    "aug-cc-pvtz":"aug-cc-pvtz"
+    }
+
+    #actually write the files
+
+    if benchmark:
+        write_benchmark():
+
+    else:
+        x=0
+        tier=False
+        basislist=False 
+        writeinput(basislist,tier,inputdir,basename,name,workdir,optcores[0],optmemory[0],optmethod,optbasis,optroute,specialopts,x,charge,mult,benchmarkflag,user)
+
+
+if __name__ == '__main__':
+    main()
 

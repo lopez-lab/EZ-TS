@@ -91,6 +91,7 @@
                 echo "MoRot TS is substantially lower than other conformers by $ediff kcal/mol: $lowestenergyts `pwd`" >>  /scratch/neal.pa/autots-errors/$search
             fi
             cp $lowestenergyts ../lowest_ts/$search.log
+            cp ${lowestenergyts%.*}.chk ../lowest_ts/$search.chk
             echo $lowestenergyts >> ../lowest_ts/$search-lowest_ts-energies.txt
             grep "Sum of electronic and thermal Free Energies" ../lowest_ts/$search.log >> ../lowest_ts/$search-lowest_ts-energies.txt
             echo " " >> ../lowest_ts/$search-lowest_ts-energies.txt
