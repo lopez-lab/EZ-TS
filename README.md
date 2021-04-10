@@ -28,9 +28,9 @@ With each step in the chain there are a number of potential hicups from ORCA, G1
    ### CALCULATION SETUP
 To set up a workflow, in a directory of Gaussian log files or XYZ coordinate files execute ```EZTS-setup``` in that directory.
 There are three options to EZTS-setup: 
-```-i``` or ```--irc``` - preform an Intrinsic Reaction Coordinate (IRC) calculation from the lowest energy TS and optimize the reactants
-```-s``` or ```--smiles``` - set up based on a .smi file (see below)
-```-b``` or ```--benchmark``` - preform benchmarking based on methods specified in config file
+ * ```-i``` or ```--irc``` - preform an Intrinsic Reaction Coordinate (IRC) calculation from the lowest energy TS and optimize the reactants
+ * ```-s``` or ```--smiles``` - set up based on a .smi file (see below)
+ * ```-b``` or ```--benchmark``` - preform benchmarking based on methods specified in config file
 
 ```
 [Azoarenes]$ ls
@@ -84,9 +84,9 @@ The lowest energy TS for each input structure will be located in the /lowest_ts 
 If IRCs are requested (```-i``` or ```--irc```), both the _cis_ and _trans_ structures will be optimized, to differentiate between them and retrieve the correct _Z -> E_ barrier, use the /utilities/compile_results.py script. If benchmarking is requested, a similar script /utilities/compile_results-benchmarking.py should be used to get barriers for all methods tested.
 
 Both of the compile_results scripts have the availible agrugments:
-```-d``` or ```--directories``` - parent EZ-TS directories to compile results from. This allows for multiple directories to be compiled at once, but if the script is run in a workflow/utilities directory without the ```-d``` argument, it will just extract that workflow.
-```-o``` or ```--output``` - output file. Will default to ```compiled_data-(day)-(month)-(hour)-(minute).xlsx``` if none provided. 
-```-e``` or ```--experimental``` - an escaped json string of molecule:barrier key:value pairs like ```"{\"mol1\":15,\"mol1\":22}"```. 
+ * ```-d``` or ```--directories``` - parent EZ-TS directories to compile results from. This allows for multiple directories to be compiled at once, but if the script is run in a workflow/utilities directory without the ```-d``` argument, it will just extract that workflow.
+ * ```-o``` or ```--output``` - output file. Will default to ```compiled_data-(day)-(month)-(hour)-(minute).xlsx``` if none provided. 
+ * ```-e``` or ```--experimental``` - an escaped json string of molecule:barrier key:value pairs like ```"{\"mol1\":15,\"mol1\":22}"```. 
 
 ## UPDATING CODE
 
