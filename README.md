@@ -81,7 +81,7 @@ bash start.sh
 ```
    This will submit the jobs for all input structures.
    
-   ### Results
+   ### RESULTS
 The lowest energy TS for each input structure will be located in the /lowest_ts directory once the workflow is complete. 
 
 If IRCs are requested (```-i``` or ```--irc```), both the _cis_ and _trans_ structures will be optimized, to differentiate between them and retrieve the correct _Z -> E_ barrier, use the /utilities/compile_results.py script. If benchmarking is requested, a similar script /utilities/compile_results-benchmarking.py should be used to get barriers for all methods tested.
