@@ -2868,64 +2868,70 @@ def gen_inputs(input,list,axis,angles,benchmark,irc,utilities_dir,ts_guess_dir,c
         #1 - reading the input structure
         #2 - manipulating the minima structre to 12 TS guess structures
         #3 - outputting information used to set up all of the calculations
-        charge,multiplicity,c1,a1,a2,c2,title,xyz,new_mol,natom=MoRot(file,ax,ang,index,optcores,optmemory,optmethod,optbasis,ts_guessroute,ts_guess_dir,specialopts)
-        
+        try:
+            charge,multiplicity,c1,a1,a2,c2,title,xyz,new_mol,natom=MoRot(file,ax,ang,index,optcores,optmemory,optmethod,optbasis,ts_guessroute,ts_guess_dir,specialopts)
+            rotation_sucessful = True
+        except:
+            print('Could not generate TS guess number {0} coordinates for {1}'.format(count,title))
+            rotation_sucessful = False
+            
         #for the first TS guess structure of each input molecule, setup all the scripts
-        if count == 1:
-            #shorten the title if its really long
-            if len(title) > 20:
-                tmptitle=title[0:10]
-            else:
-                tmptitle=title
+        if rotation_successful:
+            if count == 1:
+                #shorten the title if its really long
+                if len(title) > 20:
+                    tmptitle=title[0:10]
+                else:
+                    tmptitle=title
 
-            #ts_guess (actual input file written within MoRot)
-            ts_guess._sbatch(tmptitle,optpartition,optcores[0],optmemory[0],opttime,jobs_per_mol,ts_guess_dir,title,runlog,g16root,ts_guessroute)
-            ts_guess._failed(tmptitle,short_partition,ts_guess_dir,title,charge,multiplicity,conf_search_dir,optroute)
-            with open('{0}/{1}-coms.txt'.format(ts_guess_dir,title),'w') as coms:
-                coms.write("{0}-rot-{1}.com\n".format(title,index))
+                #ts_guess (actual input file written within MoRot)
+                ts_guess._sbatch(tmptitle,optpartition,optcores[0],optmemory[0],opttime,jobs_per_mol,ts_guess_dir,title,runlog,g16root,ts_guessroute)
+                ts_guess._failed(tmptitle,short_partition,ts_guess_dir,title,charge,multiplicity,conf_search_dir,optroute)
+                with open('{0}/{1}-coms.txt'.format(ts_guess_dir,title),'w') as coms:
+                    coms.write("{0}-rot-{1}.com\n".format(title,index))
 
-            #conf search
-            CRESTdir = '{0}/{1}/CREST'.format(conf_search_dir,title)
-            ORCAdir = '{0}/{1}/ORCA'.format(conf_search_dir,title)
-            conf_search._CREST_constraints(c1,c2,a1,a2,tmptitle,CRESTdir,title,natom)
-            conf_search._CREST_sbatch(tmptitle,CRESTpartition,CRESTcores,CRESTmem,CRESTtime,ts_guess_dir,title,utilities_dir,XTBPATH,LD_LIBRARY_PATH,CRESTdir,CRESTmethod,c1,a1,a2,c2)
-            conf_search._ORCA_input(ORCAmethod,ORCAcores,ORCAmem,title,c1,c2,a1,a2,ORCAdir,ORCAoptsteps,charge,multiplicity)
-            conf_search._ORCA_sbatch(tmptitle,ORCAcores,ORCAtime,ORCApartition,ORCAmem,ORCAdir,ORCA_EXE,OPENMPI,title,ORCAmethod,errorlog)
+                #conf search
+                CRESTdir = '{0}/{1}/CREST'.format(conf_search_dir,title)
+                ORCAdir = '{0}/{1}/ORCA'.format(conf_search_dir,title)
+                conf_search._CREST_constraints(c1,c2,a1,a2,tmptitle,CRESTdir,title,natom)
+                conf_search._CREST_sbatch(tmptitle,CRESTpartition,CRESTcores,CRESTmem,CRESTtime,ts_guess_dir,title,utilities_dir,XTBPATH,LD_LIBRARY_PATH,CRESTdir,CRESTmethod,c1,a1,a2,c2)
+                conf_search._ORCA_input(ORCAmethod,ORCAcores,ORCAmem,title,c1,c2,a1,a2,ORCAdir,ORCAoptsteps,charge,multiplicity)
+                conf_search._ORCA_sbatch(tmptitle,ORCAcores,ORCAtime,ORCApartition,ORCAmem,ORCAdir,ORCA_EXE,OPENMPI,title,ORCAmethod,errorlog)
 
-            #conf opt
-            conf_opt._inputs(conf_opt_dir,title,optcores[0],optmemory[0],optmethod,optbasis,optroute,specialopts,charge,multiplicity)
-            conf_opt._sbatch(tmptitle,optpartition,optcores[0],optmemory[0],opttime,conf_opt_dir,title,charge,multiplicity,conf_search_dir,g16root)
-            conf_opt._failed(tmptitle,short_partition,conf_opt_dir,title,charge,multiplicity,lowest_ts_dir,errorlog)
+                #conf opt
+                conf_opt._inputs(conf_opt_dir,title,optcores[0],optmemory[0],optmethod,optbasis,optroute,specialopts,charge,multiplicity)
+                conf_opt._sbatch(tmptitle,optpartition,optcores[0],optmemory[0],opttime,conf_opt_dir,title,charge,multiplicity,conf_search_dir,g16root)
+                conf_opt._failed(tmptitle,short_partition,conf_opt_dir,title,charge,multiplicity,lowest_ts_dir,errorlog)
 
-            #Lowest ts
-            getlowest(title,conf_opt_dir,utilities_dir,benchmark,runlog,short_partition,tmptitle,irc,c1,a1,a2,c2,lowest_ts_dir)
+                #Lowest ts
+                getlowest(title,conf_opt_dir,utilities_dir,benchmark,runlog,short_partition,tmptitle,irc,c1,a1,a2,c2,lowest_ts_dir)
 
-            if benchmark:
-                #WRITE BENCHMARKING HERE
-                benchmarking._input(benchmarkmethods,benchmarkbasis,benchmark_dir,title,optmethod,optcores,optmemory,optbasis,optroute,charge,multiplicity)
+                if benchmark:
+                    #WRITE BENCHMARKING HERE
+                    benchmarking._input(benchmarkmethods,benchmarkbasis,benchmark_dir,title,optmethod,optcores,optmemory,optbasis,optroute,charge,multiplicity)
                 benchmarking._sbatch(benchmarkbasis,tmptitle,optpartition,optcores,optmemory,opttime,benchmark_dir,title,g16root)
                 benchmarking._failed(tmptitle,short_partition,benchmark_dir,title,charge,multiplicity,errorlog,benchmarkbasis)
 
-            if irc:
-                #WRITE IRC HERE
-                if benchmark:
-                    IRC._benchmarking_input(benchmarkmethods,benchmarkbasis,irc_dir,optcores,optmemory,ircroute_forward,ircroute_reverse,charge,multiplicity,title)
-                    IRC._benchmarking_sbatch(benchmarkbasis,tmptitle,optpartition,optcores,optmemory,opttime,irc_dir,title,g16root)
-                    IRC._benchmarking_reactants_input(benchmarkmethods,benchmarkbasis,reactants_dir,optcores,optmemory,optroute_reactants,charge,multiplicity,title)
-                    IRC._reactants_benchmarking_sbatch(benchmarkbasis,tmptitle,optpartition,optcores,optmemory,opttime,reactants_dir,title,g16root)
-                    IRC._reactants_benchmarking_failed(benchmarkbasis,tmptitle,short_partition,reactants_dir,title,charge,multiplicity,errorlog)
-                else:
-                    IRC._input(irc_dir,title,optcores[0],optmemory[0],optmethod,optbasis,ircroute_forward,ircroute_reverse,specialopts,charge,multiplicity)
-                    IRC._sbatch(tmptitle,optpartition,optcores[0],optmemory[0],opttime,irc_dir,title,g16root)
-                    IRC._reactants_input(reactants_dir,title,optcores[0],optmemory[0],optmethod,optbasis,optroute_reactants,specialopts,charge,multiplicity)
-                    IRC._reactants_sbatch(tmptitle,optpartition,optcores[0],optmemory[0],opttime,reactants_dir,title,g16root)
-                    IRC._reactants_failed(tmptitle,short_partition,reactants_dir,title,charge,multiplicity,errorlog)
+                if irc:
+                    #WRITE IRC HERE
+                    if benchmark:
+                        IRC._benchmarking_input(benchmarkmethods,benchmarkbasis,irc_dir,optcores,optmemory,ircroute_forward,ircroute_reverse,charge,multiplicity,title)
+                        IRC._benchmarking_sbatch(benchmarkbasis,tmptitle,optpartition,optcores,optmemory,opttime,irc_dir,title,g16root)
+                        IRC._benchmarking_reactants_input(benchmarkmethods,benchmarkbasis,reactants_dir,optcores,optmemory,optroute_reactants,charge,multiplicity,title)
+                        IRC._reactants_benchmarking_sbatch(benchmarkbasis,tmptitle,optpartition,optcores,optmemory,opttime,reactants_dir,title,g16root)
+                        IRC._reactants_benchmarking_failed(benchmarkbasis,tmptitle,short_partition,reactants_dir,title,charge,multiplicity,errorlog)
+                    else:
+                        IRC._input(irc_dir,title,optcores[0],optmemory[0],optmethod,optbasis,ircroute_forward,ircroute_reverse,specialopts,charge,multiplicity)
+                        IRC._sbatch(tmptitle,optpartition,optcores[0],optmemory[0],opttime,irc_dir,title,g16root)
+                        IRC._reactants_input(reactants_dir,title,optcores[0],optmemory[0],optmethod,optbasis,optroute_reactants,specialopts,charge,multiplicity)
+                        IRC._reactants_sbatch(tmptitle,optpartition,optcores[0],optmemory[0],opttime,reactants_dir,title,g16root)
+                        IRC._reactants_failed(tmptitle,short_partition,reactants_dir,title,charge,multiplicity,errorlog)
 
-        #If not the first in the molecule batch, just add the name to the list of TS guesses
-        else:
-            #list of input files for ts_guess
-            with open('{0}/{1}-coms.txt'.format(ts_guess_dir,title),'a') as coms:
-                coms.write("{0}-rot-{1}.com\n".format(title,index))
+            #If not the first in the molecule batch, just add the name to the list of TS guesses
+            else:
+                #list of input files for ts_guess
+                with open('{0}/{1}-coms.txt'.format(ts_guess_dir,title),'a') as coms:
+                    coms.write("{0}-rot-{1}.com\n".format(title,index))
 
         #if the count is less than the jobs per molecule, it is the same molecule, so grab the next
         if count < jobs_per_mol:
