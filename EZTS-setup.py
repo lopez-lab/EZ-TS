@@ -68,7 +68,7 @@ def main():
     shutil.copy(os.path.expanduser('~/EZ-TS/generate_inputs.py'),'{0}/utilities/generate_inputs.py'.format(workdir))
     shutil.copy(os.path.expanduser('~/EZ-TS/get_lowest.py'),'{0}/utilities/get_lowest.py'.format(workdir))
 #    shutil.copy(os.path.expanduser('~/EZ-TS/start.sh'),'{0}/start.sh'.format(workdir))
-    shutil.copy(os.path.expanduser('~/EZ-TS/xyz2com.py'),'{0}/utilities/xyz2com.py'.format(workdir))
+#    shutil.copy(os.path.expanduser('~/EZ-TS/xyz2com.py'),'{0}/utilities/xyz2com.py'.format(workdir))
     shutil.copy(os.path.expanduser('~/EZ-TS/orca2xyz.py'),'{0}/utilities/orca2xyz.py'.format(workdir))
     shutil.copy(os.path.expanduser('~/EZ-TS/smiles23D.py'),'{0}/utilities/smiles23D.py'.format(workdir))
     shutil.copy(os.path.expanduser('~/EZ-TS/compile_results-benchmarking.py'),'{0}/utilities/compile_results-benchmarking.py'.format(workdir)) 
