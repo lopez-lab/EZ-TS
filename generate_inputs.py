@@ -2872,7 +2872,7 @@ def gen_inputs(input,list,axis,angles,benchmark,irc,utilities_dir,ts_guess_dir,c
             charge,multiplicity,c1,a1,a2,c2,title,xyz,new_mol,natom=MoRot(file,ax,ang,index,optcores,optmemory,optmethod,optbasis,ts_guessroute,ts_guess_dir,specialopts)
             rotation_sucessful = True
         except:
-            print('Could not generate TS guess number {0} coordinates for {1}'.format(count,title))
+            print('Could not generate TS guess number {0} coordinates for {1}'.format(count,file))
             rotation_sucessful = False
             
         #for the first TS guess structure of each input molecule, setup all the scripts
