@@ -7,7 +7,8 @@ import sys
 #read the smiles file
 def read_input(input):
     try:
-        allinputs=np.genfromtxt(input,dtype='str')
+        #some smiles can user the # character - define the comment string to prevent mis-reading the input file
+        allinputs=np.genfromtxt(input,dtype='str',comments="<!--")
         return(allinputs)
     except:
         print("""Could not parse smi file. Please check the format is - 
