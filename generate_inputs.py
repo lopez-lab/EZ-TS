@@ -831,7 +831,7 @@ if [[ $nresub -lt 2 ]]
     then
     rm {3}-resubmit.txt
     echo $nresub >> {3}-resubmit.txt
-    for i in {3}*log
+    for i in {3}-rot*log
         do
         finished=$(tail $i | grep 'Normal termination' -c )
         freq=$(tac $i | grep "imaginary frequencies (negative Signs)"  -m1 |awk '{{ print $2 }}' )
@@ -873,7 +873,7 @@ elif [[ $nresub == 2 ]]
     touch freqonly
     rm {3}-resubmit.txt
     echo $nresub >> {3}-resubmit.txt
-    for i in {3}*log
+    for i in {3}-rot*log
         do
         finished=$(tail $i | grep 'Normal termination' -c )
         if [[ $finished -lt 1 ]]
@@ -1136,7 +1136,7 @@ if [[ ${{SLURM_ARRAY_TASK_ID}} -eq 1 ]]
         then
         rm {6}-complete
         rm {6}-energies.txt
-        sed -i '1,/{7} {8}/!d' {6}*com
+        sed -i '1,/{7} {8}/!d' {6}-conf*com
     fi
     nstruct=$(ls -la {9}/{6}/ORCA/{6}-all-sorted-conf*.xyz |wc -l)
     for ((x=1;x<=nstruct;x++)); do  
@@ -1232,7 +1232,7 @@ if [[ $nresub -lt 3 ]]
     then
     rm {3}-resubmit.txt
     echo $nresub >> {3}-resubmit.txt
-    for i in {0}*log
+    for i in {0}-conf*log
         do
         finished=$(grep 'Station' -c $i)
         freq=$(tac $i | grep "imaginary frequencies (negative Signs)"  -m1 |awk '{{ print $2 }}' )
@@ -1371,7 +1371,7 @@ else
     fi
     echo 'Falied too many times and need manual attention - re-submit with {3}-submit.sbatch after making changes' >> {3}-NEEDS_MANUAL_FIX.txt
 
-    for i in {3}*log
+    for i in {3}-conf*log
         do
         finished=$(grep 'Station' -c $i)
         if [[ $finished -lt 2 ]]
@@ -1445,7 +1445,7 @@ cd ../lowest_ts
 
 #add coordinates to each tier0 benchmarking input
 obabel {0}.log -o xyz -O {0}.xyz
-for i in ../benchmarking/{0}*-tier0*com
+for i in ../benchmarking/{0}-*-tier0.com
     do
     tail -n +3 {0}.xyz >> $i
     echo " " >> $i
@@ -1664,7 +1664,7 @@ if [[ $nresub -lt 3 ]]
     then
     rm {3}-tier{4}-resubmit.txt
     echo $nresub >> {3}-tier{4}-resubmit.txt
-    for i in {3}*tier{4}.log
+    for i in {3}-*-tier{4}.log
         do
         echo "READING FILE $i" >>{3}-tier{4}-resublog.txt
         finished=$(grep 'Station' -c $i)
@@ -1854,7 +1854,7 @@ else
     fi
     echo 'Falied too many times and need manual attention - re-submit with {3}-tier{4}.sbatch after making changes' >> {3}-tier{4}-NEEDS_MANUAL_FIX.txt
 
-    for i in {3}*tier{4}.log
+    for i in {3}-*-tier{4}.log
         do
         finished=$(grep 'Station' -c $i)
         if [[ $finished -lt 2 ]]
@@ -1990,7 +1990,7 @@ if [[ $SLURM_ARRAY_TASK_ID == 1 ]]
     sbatch --dependency=afterok:$ID ../reactants/{8}-tier{1}.sbatch
     
     #get force constants/geometries
-    for i in {8}*tier{1}*forward.com
+    for i in {8}-*-tier{1}-forward.com
         do
         old=$(grep "%oldchk=" -c $i)
         if [[ $old -gt 0 ]]
@@ -2014,7 +2014,7 @@ if [[ $SLURM_ARRAY_TASK_ID == 1 ]]
         fi
      done
 
-    for i in {8}*tier{1}*reverse.com
+    for i in {8}-*-tier{1}-reverse.com
         do
         old=$(grep "%oldchk=" -c $i)
         if [[ $old -gt 0 ]]
@@ -2309,7 +2309,7 @@ if [[ $SLURM_ARRAY_TASK_ID == 1 ]]
     sbatch --dependency=afternotok:$ID {6}-failed.sbatch
     
     #get geometries
-    for i in {6}*com
+    for i in {6}-forward.com {6}-reverse.com
         do
         obabel ../irc/${{i%.*}}.log -o xyz | tail -n +3 >> $i
         echo " " >> $i
@@ -2375,7 +2375,7 @@ if [[ $nresub -lt 3 ]]
     then
     rm {3}-tier{4}-resubmit.txt
     echo $nresub >> {3}-tier{4}-resubmit.txt
-    for i in {3}*tier{4}*log
+    for i in {3}-*-tier{4}.log
         do
         echo "READING FILE $i" >>{3}-tier{4}-resublog.txt
         finished=$(grep 'Station' -c $i)
@@ -2564,7 +2564,7 @@ else
         rm {3}-tier{4}-NEEDS_MANUAL_FIX.txt
     fi
     echo 'Falied too many times and need manual attention - re-submit with {3}-tier{4}.sbatch after making changes' >> {3}-tier{4}-NEEDS_MANUAL_FIX.txt
-    for i in {3}*tier{4}*log
+    for i in {3}-*-tier{4}.log
         do
         finished=$(grep 'Station' -c $i)
         if [[ $finished -lt 2 ]]
@@ -2629,7 +2629,7 @@ if [[ $nresub -lt 3 ]]
     then
     rm {3}-resubmit.txt
     echo $nresub >> {3}-resubmit.txt
-    for i in {3}*log
+    for i in {3}-forward.log {3}-reverse.log
         do
         finished=$(grep 'Station' -c $i)
         freq=$(tac $i | grep "imaginary frequencies (negative Signs)"  -m1 |awk '{{ print $2 }}' )
@@ -2766,7 +2766,7 @@ if [[ $nresub -lt 3 ]]
     sbatch --dependency=afternotok:$ID {3}-failed.sbatch
 
 else
-    for i in {3}*log
+    for i in {3}-forward.log {3}-reverse.log
         do
         finished=$(grep 'Station' -c $i)
         if [[ $finished -lt 2 ]]
