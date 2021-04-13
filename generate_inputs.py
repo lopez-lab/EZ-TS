@@ -2909,8 +2909,8 @@ def gen_inputs(input,list,axis,angles,benchmark,irc,utilities_dir,ts_guess_dir,c
                 if benchmark:
                     #WRITE BENCHMARKING HERE
                     benchmarking._input(benchmarkmethods,benchmarkbasis,benchmark_dir,title,optmethod,optcores,optmemory,optbasis,optroute,charge,multiplicity)
-                benchmarking._sbatch(benchmarkbasis,tmptitle,optpartition,optcores,optmemory,opttime,benchmark_dir,title,g16root)
-                benchmarking._failed(tmptitle,short_partition,benchmark_dir,title,charge,multiplicity,errorlog,benchmarkbasis)
+                    benchmarking._sbatch(benchmarkbasis,tmptitle,optpartition,optcores,optmemory,opttime,benchmark_dir,title,g16root)
+                    benchmarking._failed(tmptitle,short_partition,benchmark_dir,title,charge,multiplicity,errorlog,benchmarkbasis)
 
                 if irc:
                     #WRITE IRC HERE
