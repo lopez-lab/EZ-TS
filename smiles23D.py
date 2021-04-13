@@ -7,7 +7,7 @@ import sys
 #read the smiles file
 def read_input(input):
     try:
-        #some smiles can user the # character - define the comment string to prevent mis-reading the input file
+        #some smiles can use the # character - define the comment string to prevent mis-reading the input file
         allinputs=np.genfromtxt(input,dtype='str',comments="<!--")
         return(allinputs)
     except:
