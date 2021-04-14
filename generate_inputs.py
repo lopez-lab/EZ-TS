@@ -1066,6 +1066,16 @@ if [[ $SLURM_ARRAY_TASK_ID == 1 ]]
     sbatch --dependency=afterany:$SLURM_ARRAY_JOB_ID ../../../conf_opt/{8}-submit.sbatch
     time=$(date)
     echo "$SLURM_JOB_NAME $time" >> ../../../status.txt
+    
+    sed -i "s/#SBATCH --array=.*/#SBATCH --array=1-10/g" ../../../conf_opt/{8}-submit.sbatch
+        if test -f ../../../conf_opt/{8}-resubmit.txt
+        then
+        rm ../../../conf_opt/{8}-resubmit.txt
+    fi
+    if test -f ../../../conf_opt/{8}-NEEDS_MANUAL_FIX.txt
+        then
+        rm ../../../conf_opt/{8}-NEEDS_MANUAL_FIX.txt
+    fi
 else
     sleep 120s
 fi
