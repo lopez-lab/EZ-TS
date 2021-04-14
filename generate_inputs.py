@@ -978,8 +978,8 @@ export LD_LIBRARY_PATH={9}
 work={10}
 cd $work
 #reset next steps to make resubmission easier
-sed -i "s/#SBATCH --array=.*/#SBATCH --array=1-END%100/g" ../ORCA/{6}-ORCA.sbatch
-sed -i "s/#SBATCH --array=.*/#SBATCH --array=1-10/g" ../../../conf_opt/{6}-submit.sbatch
+sed -i "0,/#SBATCH --array=.*/s//#SBATCH --array=1-END%100/g" ../ORCA/{6}-ORCA.sbatch
+sed -i "0,/#SBATCH --array=.*/s//#SBATCH --array=1-10/g" ../../../conf_opt/{6}-submit.sbatch
 if test -f ../../../conf_opt/{6}-resubmit.txt
     then
     rm ../../../conf_opt/{6}-resubmit.txt
@@ -1067,8 +1067,8 @@ if [[ $SLURM_ARRAY_TASK_ID == 1 ]]
     time=$(date)
     echo "$SLURM_JOB_NAME $time" >> ../../../status.txt
     
-    sed -i "s/#SBATCH --array=.*/#SBATCH --array=1-10/g" ../../../conf_opt/{8}-submit.sbatch
-        if test -f ../../../conf_opt/{8}-resubmit.txt
+    sed -i "0,/#SBATCH --array=.*/s//#SBATCH --array=1-10/g" ../../../conf_opt/{8}-submit.sbatch
+    if test -f ../../../conf_opt/{8}-resubmit.txt
         then
         rm ../../../conf_opt/{8}-resubmit.txt
     fi
