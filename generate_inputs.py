@@ -977,6 +977,9 @@ export LD_LIBRARY_PATH={9}
 
 work={10}
 cd $work
+#reset next step array to make resubmission easier
+sed -i "s/#SBATCH --array=.*/#SBATCH --array=1-END%100/g" ../ORCA/{6}-ORCA.sbatch
+
 cp {6}.xyz {0}.xyz
 cp {6}.c {0}.c
 cp {6}.xyz {0}.ref
@@ -991,7 +994,7 @@ sed -i 's/BR/Br/g' ../ORCA/{6}-all.xyz
 obabel ../ORCA/{6}-all.xyz -O ../ORCA/{6}-all-sorted-conf.xyz -m
 sleep 120s
 nstruct=$(ls -la ../ORCA/{6}-all-sorted-conf*.xyz |wc -l)
-sed -i "s/END/$nstruct/g" ../ORCA/*sbatch
+sed -i "s/END/$nstruct/g" ../ORCA/{6}-ORCA.sbatch
 ORCAID=$(sbatch --parsable ../ORCA/{6}-ORCA.sbatch)
     """.format(tmptitle,CRESTpartition,CRESTcores,CRESTmem,CRESTtime,ts_guess_dir,title,utilities_dir,XTBPATH,LD_LIBRARY_PATH,CRESTdir,CRESTmethod,c1,a1,a2,c2)
         with open('{0}/{1}-CREST.sbatch'.format(CRESTdir,title),'w') as batch:
