@@ -1468,7 +1468,7 @@ python3 ../utilities/get_lowest.py {0} {6} {7} {8} {9} conf_opt
 cd ../lowest_ts
 
 success=$(ls -la {0}.log | wc -l)
-if [[ $success -lt 1]]
+if [[ $success -lt 1 ]]
     then
     echo "No valid TS structure generated for {0} - check the conformer geometries" >> ../status.txt
     exit 1234
@@ -1519,7 +1519,7 @@ python3 ../utilities/get_lowest.py {0} {7} {8} {9} {10} conf_opt
 cd ../lowest_ts
 
 success=$(ls -la {0}.log | wc -l)
-if [[ $success -lt 1]]
+if [[ $success -lt 1 ]]
     then
     echo "No valid TS structure generated for {0} - check the conformer geometries" >> ../status.txt
     exit 1234
@@ -1563,7 +1563,7 @@ python3 ../utilities/get_lowest.py {3} {7} {8} {9} {10} conf_opt
 cd ../lowest_ts
 
 success=$(ls -la {0}.log | wc -l)
-if [[ $success -lt 1]]
+if [[ $success -lt 1 ]]
     then
     echo "No valid TS structure generated for {0} - check the conformer geometries" >> ../status.txt
     exit 1234
