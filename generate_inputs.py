@@ -1149,7 +1149,19 @@ if [[ ${{SLURM_ARRAY_TASK_ID}} -eq 1 ]]
         rm {6}-complete
         rm {6}-energies.txt
         sed -i '1,/{7} {8}/!d' {6}-conf*com
+        for i in {6}-conf*com
+            do
+            old=$(grep "%oldchk=" -c $i)
+            if [[ $old -gt 0 ]]
+                then
+                sed -i 1d $i
+                sed -i 's/geom=check//g' $i
+                sed -i 's/guess=read//g' $i
+                sed -i 's/readfc/calcfc/g' $i
+            fi
+        done     
     fi
+    
     nstruct=$(ls -la {9}/{6}/ORCA/{6}-all-sorted-conf*.xyz |wc -l)
     for ((x=1;x<=nstruct;x++)); do  
         energy=$(tac {9}/{6}/ORCA/{6}-conf$x.out | grep "FINAL SINGLE POINT ENERGY" -m1)
