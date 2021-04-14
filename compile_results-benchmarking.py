@@ -187,7 +187,7 @@ class Element:
 
 def Read_azo(filename):
     for line in open(filename,'r'):
-        if re.search('python3 ../utilities/get-lowest.py',line):
+        if re.search('python3 ../utilities/get_lowest.py',line):
             c1 = int(line.split()[3])
             a1 = int(line.split()[4])
             a2 = int(line.split()[5])
