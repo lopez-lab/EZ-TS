@@ -977,8 +977,17 @@ export LD_LIBRARY_PATH={9}
 
 work={10}
 cd $work
-#reset next step array to make resubmission easier
+#reset next steps to make resubmission easier
 sed -i "s/#SBATCH --array=.*/#SBATCH --array=1-END%100/g" ../ORCA/{6}-ORCA.sbatch
+sed -i "s/#SBATCH --array=.*/#SBATCH --array=1-10/g" ../../../conf_opt/{6}-submit.sbatch
+if test -f ../../../conf_opt/{6}-resubmit.txt
+    then
+    rm ../../../conf_opt/{6}-resubmit.txt
+fi
+if test -f ../../../conf_opt/{6}-NEEDS_MANUAL_FIX.txt
+    then
+    rm ../../../conf_opt/{6}-NEEDS_MANUAL_FIX.txt
+fi
 
 cp {6}.xyz {0}.xyz
 cp {6}.c {0}.c
