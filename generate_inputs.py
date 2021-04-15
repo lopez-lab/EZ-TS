@@ -977,17 +977,8 @@ export LD_LIBRARY_PATH={9}
 
 work={10}
 cd $work
-#reset next steps to make resubmission easier
+#reset next step to make resubmission easier
 sed -i "0,/#SBATCH --array=.*/s//#SBATCH --array=1-END%100/g" ../ORCA/{6}-ORCA.sbatch
-sed -i "0,/#SBATCH --array=.*/s//#SBATCH --array=1-10/g" ../../../conf_opt/{6}-submit.sbatch
-if test -f ../../../conf_opt/{6}-resubmit.txt
-    then
-    rm ../../../conf_opt/{6}-resubmit.txt
-fi
-if test -f ../../../conf_opt/{6}-NEEDS_MANUAL_FIX.txt
-    then
-    rm ../../../conf_opt/{6}-NEEDS_MANUAL_FIX.txt
-fi
 
 cp {6}.xyz {0}.xyz
 cp {6}.c {0}.c
@@ -1057,6 +1048,7 @@ export PATH=$OPENMPI/bin:$PATH
 cd $WORKDIR
 if [[ $SLURM_ARRAY_TASK_ID == 1 ]]
     then
+    rm {8}*conf*.out
     nstruct=$(ls -la {8}-all-sorted-conf*.xyz |wc -l)
     inp=$(cat {8}.inp)
     for ((i=1;i<=nstruct;i++))
@@ -1067,7 +1059,11 @@ if [[ $SLURM_ARRAY_TASK_ID == 1 ]]
     time=$(date)
     echo "$SLURM_JOB_NAME $time" >> ../../../status.txt
     
+    #reset next steps for easier resubmission
     sed -i "0,/#SBATCH --array=.*/s//#SBATCH --array=1-10/g" ../../../conf_opt/{8}-submit.sbatch
+    sed -i 's/{8}-NEEDS_MANUAL_FIX.txt/{8}-coms.txt/g' ../../../conf_opt/{8}-submit.sbatch
+    sed -i 's/{8}-resubmit.txt/{8}-coms.txt/g' ../../../conf_opt/{8}-submit.sbatch
+    
     if test -f ../../../conf_opt/{8}-resubmit.txt
         then
         rm ../../../conf_opt/{8}-resubmit.txt
