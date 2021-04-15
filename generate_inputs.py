@@ -1063,6 +1063,7 @@ if [[ $SLURM_ARRAY_TASK_ID == 1 ]]
     sed -i "0,/#SBATCH --array=.*/s//#SBATCH --array=1-10/g" ../../../conf_opt/{8}-submit.sbatch
     sed -i 's/{8}-NEEDS_MANUAL_FIX.txt/{8}-coms.txt/g' ../../../conf_opt/{8}-submit.sbatch
     sed -i 's/{8}-resubmit.txt/{8}-coms.txt/g' ../../../conf_opt/{8}-submit.sbatch
+    rm ../../../conf_opt/{8}-conf*log
     
     if test -f ../../../conf_opt/{8}-resubmit.txt
         then
