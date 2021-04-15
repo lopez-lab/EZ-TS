@@ -1411,7 +1411,7 @@ else
             echo ${{i%.*}}.com >> {3}-NEEDS_MANUAL_FIX.txt
 
         else
-            freq=$(grep "imaginary frequencies (negative Signs)"  $i |awk '{{ print $2 }}' )
+            freq=$(tac $i | grep "imaginary frequencies (negative Signs)"  -m1 |awk '{{ print $2 }}' )
             if [[ $freq -gt 1 ]]
                 then 
                 echo ${{i%.*}}.com >> {3}-NEEDS_MANUAL_FIX.txt
