@@ -1055,10 +1055,7 @@ if [[ $SLURM_ARRAY_TASK_ID == 1 ]]
         do
         echo -e "${{inp/FILE/{8}-all-sorted-conf$i.xyz}}" > {8}-conf$i.inp
     done
-    sbatch --dependency=afterany:$SLURM_ARRAY_JOB_ID ../../../conf_opt/{8}-submit.sbatch
-    time=$(date)
-    echo "$SLURM_JOB_NAME $time" >> ../../../status.txt
-    
+
     #reset next steps for easier resubmission
     sed -i "0,/#SBATCH --array=.*/s//#SBATCH --array=1-10/g" ../../../conf_opt/{8}-submit.sbatch
     sed -i 's/{8}-NEEDS_MANUAL_FIX.txt/{8}-coms.txt/g' ../../../conf_opt/{8}-submit.sbatch
@@ -1073,6 +1070,10 @@ if [[ $SLURM_ARRAY_TASK_ID == 1 ]]
         then
         rm ../../../conf_opt/{8}-NEEDS_MANUAL_FIX.txt
     fi
+    
+    sbatch --dependency=afterany:$SLURM_ARRAY_JOB_ID ../../../conf_opt/{8}-submit.sbatch
+    time=$(date)
+    echo "$SLURM_JOB_NAME $time" >> ../../../status.txt
 else
     sleep 120s
 fi
