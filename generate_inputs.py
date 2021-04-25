@@ -1482,13 +1482,8 @@ if [[ $success -lt 1 ]]
     exit 1234
 fi
 
-#add coordinates to each tier0 benchmarking input
+#get coordinates
 obabel {0}.log -o xyz -O {0}.xyz
-for i in ../benchmarking/{0}-*-tier0.com
-    do
-    tail -n +3 {0}.xyz >> $i
-    echo " " >> $i
-done
 
 sbatch --parsable ../benchmarking/{0}-tier0.sbatch
 
