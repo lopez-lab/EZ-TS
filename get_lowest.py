@@ -187,7 +187,7 @@ def get_data(search,data,c1,a1,a2,c2):
     dihedrals = []
     Ang1s = []
     Ang2s = []
-    for file in glob.iglob('{0}*log'.format(search)):
+    for file in glob.iglob('{0}-*log'.format(search)):
         energy = None
         freq = None
         for line in open(file,'r'):
