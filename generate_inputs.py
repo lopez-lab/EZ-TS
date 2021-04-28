@@ -784,14 +784,30 @@ export g16root={9}
 cd $WORKDIR
 $g16root/g16/g16 $INPUT
 
-#if it's not the freq only step, make sure the saddle points are resubmitted
-optstep=$(grep "{10}" $input -c )
+#at least 1 station for this guess optimization - otherwise fail
+station=$(grep "Station" -c ${{INPUT%.*}}.log)
+if [[ $station -lt 1 ]]
+   then
+   exit 1234
+fi
+
+#if it's not the freq only step, make sure the saddle points are also resubmitted
+optstep=$(grep "opt=" $input -c )
 if [[ $optstep -gt 1 ]]
     then
     freq=$(tac ${{INPUT%.*}}.log | grep "imaginary frequencies (negative Signs)"  -m1 |awk '{{ print $2 }}' )
     if [[ $freq -gt 1 ]]
         then 
         exit 1234
+    fi
+
+else 
+    #if it is the freq step, check that an energy is present - otherwise fail
+    energy=$(grep "Sum of electronic and thermal Free Energies" -c ${{INPUT%.*}}.log)
+    if [[ $energy -lt 1 ]]
+        then
+            echo "ts_guess/${{INPUT%.*}}.log did not complete frequencies after 2 tries optimizing - check structure" >> ../status.txt
+            exit 1234
     fi
 fi
 
