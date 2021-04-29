@@ -45,7 +45,7 @@ runlog='~/EZ-TS/runlog/'
 
 #OPTIMIZATIONs:
 optcores=[16, 32, 32, 32]
-optmemory=[40, 80, 80, 80]
+optmemory=[120, 240, 240, 240]
 optpartition="short,lopez"
 optmethod="b3lyp"
 optbasis="6-31G(d)"
