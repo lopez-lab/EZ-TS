@@ -873,9 +873,6 @@ if [[ $nresub -lt 2 ]]
                 obabel $i -o xyz |tail -n +3 >> ${{i%.*}}.com
                 echo " " >> ${{i%.*}}.com
                 echo ${{i%.*}}.com >> {3}-resubmit.txt
-            else
-                echo "Can't identify error with ts_guess/$i"
-                echo ${{i%.*}}.com >> {3}-resubmit.txt
             fi
         fi
 
@@ -895,6 +892,8 @@ elif [[ $nresub == 2 ]]
     for i in {3}-rot*log
         do
         finished=$( grep 'Station' -c $i )
+        freq=$(tac $i | grep "imaginary frequencies (negative Signs)"  -m1 |awk '{{ print $2 }}' )
+       
         if [[ $finished -lt 1 ]]
             then
             sed -i '1,/{4} {5}/!d' ${{i%.*}}.com
@@ -902,6 +901,25 @@ elif [[ $nresub == 2 ]]
             echo " " >> ${{i%.*}}.com
             echo ${{i%.*}}.com >> {3}-resubmit.txt
             sed -i 's/{7}/freq=noraman/g' ${{i%.*}}.com
+            
+        elif [[ $freq -gt 1 ]]
+            then
+            sed -i '1,/{4} {5}/!d' ${{i%.*}}.com
+            obabel $i -o xyz |tail -n +3 >> ${{i%.*}}.com
+            echo " " >> ${{i%.*}}.com
+            echo ${{i%.*}}.com >> {3}-resubmit.txt
+            sed -i 's/{7}/freq=noraman/g' ${{i%.*}}.com
+                
+        else
+            energy=$(grep "Sum of electronic and thermal Free Energies" -c $i)
+            if [[ $energy -lt 1 ]]
+                then
+                sed -i '1,/{4} {5}/!d' ${{i%.*}}.com
+                obabel $i -o xyz |tail -n +3 >> ${{i%.*}}.com
+                echo " " >> ${{i%.*}}.com
+                echo ${{i%.*}}.com >> {3}-resubmit.txt
+                sed -i 's/{7}/freq=noraman/g' ${{i%.*}}.com
+            fi
         fi
     done
     toresub=$(cat {3}-resubmit.txt |wc -l)
@@ -1547,7 +1565,7 @@ if [[ $success -lt 1 ]]
     exit 1234
 fi
 
-obabel {3} -o xyz -O {3}.xyz
+obabel {3}.log -o xyz -O {3}.xyz
 
 sbatch  --parsable ../irc/{0}-submit.sbatch
 
@@ -1591,7 +1609,7 @@ if [[ $success -lt 1 ]]
     exit 1234
 fi
 
-obabel {3} -o xyz -O {3}.xyz
+obabel {3}.log -o xyz -O {3}.xyz
 
 """.format(title,conf_opt_dir,utilities_dir,title,tmptitle,runlog,short_partition,c1,a1,a2,c2,lowest_ts_dir)
 
