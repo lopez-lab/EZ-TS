@@ -744,7 +744,7 @@ freq
 ################
 class ts_guess():
 
-    def _sbatch(tmptitle,optpartition,optcores,optmemory,opttime,jobs_per_mol,ts_guess_dir,title,runlog,g16root,ts_guessroute):
+    def _sbatch(tmptitle,optpartition,optcores,optmemory,opttime,jobs_per_mol,ts_guess_dir,title,runlog,g16root):
         '''submission script for ts_guess optimizations, which sets up failed script and conf_search dependecy jobs'''
 
         sbatch="""#!/bin/bash
@@ -784,17 +784,16 @@ export g16root={9}
 cd $WORKDIR
 $g16root/g16/g16 $INPUT
 
-#at least 1 station for this guess optimization - otherwise fail
-station=$(grep "Station" -c ${{INPUT%.*}}.log)
-if [[ $station -lt 1 ]]
-   then
-   exit 1234
-fi
-
-#if it's not the freq only step, make sure the saddle points are also resubmitted
-optstep=$(grep "opt=" $input -c )
-if [[ $optstep -gt 1 ]]
+#if it's not the freq only step
+optstep=$(grep "opt=" $INPUT -c )
+if [[ $optstep -gt 0 ]]
     then
+    #at least 1 station for this guess optimization - otherwise fail
+    station=$(grep "Station" -c ${{INPUT%.*}}.log)
+    if [[ $station -lt 1 ]]
+       then
+       exit 1234
+    fi
     freq=$(tac ${{INPUT%.*}}.log | grep "imaginary frequencies (negative Signs)"  -m1 |awk '{{ print $2 }}' )
     if [[ $freq -gt 1 ]]
         then 
@@ -811,12 +810,12 @@ else
     fi
 fi
 
-""".format(tmptitle,optpartition,optcores,optmemory,opttime,jobs_per_mol,ts_guess_dir,title,runlog,g16root,ts_guessroute)
+""".format(tmptitle,optpartition,optcores,optmemory,opttime,jobs_per_mol,ts_guess_dir,title,runlog,g16root)
         with open('{0}/{1}-submit.sbatch'.format(ts_guess_dir,title),'w') as batch:
             batch.write(sbatch)
 
 
-    def _failed(tmptitle,short_partition,ts_guess_dir,title,charge,multiplicity,conf_search_dir,optroute):
+    def _failed(tmptitle,short_partition,ts_guess_dir,title,charge,multiplicity,conf_search_dir,ts_guessroute):
         '''handles Gaussian failures in ts_guess optimization - tries resubmitting twice, then just does a frequency calculation'''
 
         failed="""#!/bin/bash
@@ -849,31 +848,35 @@ if [[ $nresub -lt 2 ]]
     echo $nresub >> {3}-resubmit.txt
     for i in {3}-rot*log
         do
-        finished=$(tail $i | grep 'Normal termination' -c )
+        finished=$( grep 'Station' -c $i )
         freq=$(tac $i | grep "imaginary frequencies (negative Signs)"  -m1 |awk '{{ print $2 }}' )
 
         if [[ $finished -lt 1 ]]
             then
-            maxiter=$(grep "Number of steps exceeded" -c $i)
-            if [[ $maxiter -gt 0 ]]
+            sed -i '1,/{4} {5}/!d' ${{i%.*}}.com
+            obabel $i -o xyz |tail -n +3 >> ${{i%.*}}.com
+            echo " " >> ${{i%.*}}.com
+            echo ${{i%.*}}.com >> {3}-resubmit.txt
+
+        elif [[ $freq -gt 1 ]]
+            then
+            sed -i '1,/{4} {5}/!d' ${{i%.*}}.com
+            obabel $i -o xyz |tail -n +3 >> ${{i%.*}}.com
+            echo " " >> ${{i%.*}}.com
+            echo ${{i%.*}}.com >> {3}-resubmit.txt
+                
+        else
+            energy=$(grep "Sum of electronic and thermal Free Energies" -c $i)
+            if [[ $energy -lt 1 ]]
                 then
                 sed -i '1,/{4} {5}/!d' ${{i%.*}}.com
                 obabel $i -o xyz |tail -n +3 >> ${{i%.*}}.com
                 echo " " >> ${{i%.*}}.com
                 echo ${{i%.*}}.com >> {3}-resubmit.txt
             else
-                sed -i '1,/{4} {5}/!d' ${{i%.*}}.com
-                obabel $i -o xyz |tail -n +3 >> ${{i%.*}}.com
-                echo " " >> ${{i%.*}}.com
+                echo "Can't identify error with ts_guess/$i"
                 echo ${{i%.*}}.com >> {3}-resubmit.txt
             fi
-
-        elif [[ $freq -gt 1 ]]
-            then
-                sed -i '1,/{4} {5}/!d' ${{i%.*}}.com
-                obabel $i -o xyz |tail -n +3 >> ${{i%.*}}.com
-                echo " " >> ${{i%.*}}.com
-                echo ${{i%.*}}.com >> {3}-resubmit.txt
         fi
 
     done
@@ -891,7 +894,7 @@ elif [[ $nresub == 2 ]]
     echo $nresub >> {3}-resubmit.txt
     for i in {3}-rot*log
         do
-        finished=$(tail $i | grep 'Normal termination' -c )
+        finished=$( grep 'Station' -c $i )
         if [[ $finished -lt 1 ]]
             then
             sed -i '1,/{4} {5}/!d' ${{i%.*}}.com
@@ -908,7 +911,7 @@ elif [[ $nresub == 2 ]]
     sbatch --dependency=afterok:$ID {6}/{3}/CREST/{3}-CREST.sbatch
     sbatch --dependency=afternotok:$ID {3}-failed.sbatch
 fi
-""".format(tmptitle,short_partition,ts_guess_dir,title,charge,multiplicity,conf_search_dir,optroute)
+""".format(tmptitle,short_partition,ts_guess_dir,title,charge,multiplicity,conf_search_dir,ts_guessroute)
         with open('{0}/{1}-failed.sbatch'.format(ts_guess_dir,title), 'w') as batch:
             batch.write(failed)
 
@@ -2951,8 +2954,8 @@ def gen_inputs(input,list,axis,angles,benchmark,irc,utilities_dir,ts_guess_dir,c
                     tmptitle=title
 
                 #ts_guess (actual input file written within MoRot)
-                ts_guess._sbatch(tmptitle,optpartition,optcores[0],optmemory[0],opttime,jobs_per_mol,ts_guess_dir,title,runlog,g16root,ts_guessroute)
-                ts_guess._failed(tmptitle,short_partition,ts_guess_dir,title,charge,multiplicity,conf_search_dir,optroute)
+                ts_guess._sbatch(tmptitle,optpartition,optcores[0],optmemory[0],opttime,jobs_per_mol,ts_guess_dir,title,runlog,g16root)
+                ts_guess._failed(tmptitle,short_partition,ts_guess_dir,title,charge,multiplicity,conf_search_dir,ts_guessroute)
                 with open('{0}/{1}-coms.txt'.format(ts_guess_dir,title),'w') as coms:
                     coms.write("{0}-rot-{1}.com\n".format(title,index))
 
