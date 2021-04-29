@@ -854,7 +854,7 @@ if [[ $nresub -lt 2 ]]
 
         if [[ $finished -lt 1 ]]
             then
-            maxiter=$(grep "Number of steps exceeded" $i)
+            maxiter=$(grep "Number of steps exceeded" -c $i)
             if [[ $maxiter -gt 0 ]]
                 then
                 sed -i '1,/{4} {5}/!d' ${{i%.*}}.com
