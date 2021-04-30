@@ -516,7 +516,7 @@ def main():
 To compile all benchmarking results, use the compile_benchmarking_results.py script!'''.format(benchmarkdir))
 #        for x,mol in enumerate(mols):
 #            molfiles=[]
-#            molfiles.extend(glob.glob(join(benchmarkdir,'{0}*.com'.format(mol))))
+#            molfiles.extend(glob.glob(join(benchmarkdir,'{0}-*.com'.format(mol))))
 #            files[x] = molfiles
 
          
