@@ -517,7 +517,7 @@ def main():
             print('Reading benchmarking in {0}'.format(benchmarkdir))
             for x,mol in enumerate(mols):
                 molfiles=[]
-                molfiles.extend(glob.glob(join(benchmarkdir,'{0}*.com'.format(mol))))
+                molfiles.extend(glob.glob(join(benchmarkdir,'{0}-*.com'.format(mol))))
                 files[x] = molfiles
 
          
